@@ -16,38 +16,18 @@ DESC=php-cgi
 
 test -x $DAEMON || exit 0
 
+PIDFILE="/var/run/$NAME.pid"
+DAEMON="/usr/bin/php-cgi"
+SPAWN_FCGI="/usr/bin/spawn-fcgi"
+FCGI_PORT=9000
+FCGI_USER="www-data"
+FCGI_GROUP="www-data"
+FCGI_CHILDREN=0
+
 # Include php-cgi defaults if available
 if [ -f /etc/default/php-cgi ] ; then
 	. /etc/default/php-cgi
 fi
-
-if [ -z "${PIDFILE}" ]; then
-  PIDFILE="/var/run/$NAME.pid"
-fi
-
-if [ -z "${DAEMON}" ]; then
-  DAEMON="/usr/bin/php-cgi"
-fi
-
-if [ -z "${SPAWN_FCGI}" ]; then
-  SPAWN_FCGI="/usr/bin/spawn-fcgi"
-fi
-
-if [ -z "${FCGI_PORT}" ]; then
-  FCGI_PORT=9000
-fi 
-
-if [ -z "${FCGI_USER}" ]; then
-  FCGI_USER="www-data"
-fi 
-
-if [ -z "${FCGI_GROUP}" ]; then
-  FCGI_GROUP="www-data"
-fi 
-
-if [ -z "${FCGI_CHILDREN}" ]; then
-  FCGI_CHILDREN=0
-fi 
 
 SPAWN_FCGI_OPTS="-f $DAEMON -a 127.0.0.1 -p $FCGI_PORT -u $FCGI_USER -g $FCGI_GROUP -C $FCGI_CHILDREN -P $PIDFILE"
 
